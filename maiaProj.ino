@@ -14,10 +14,11 @@ DHT dht(DHTPIN, DHTTYPE);
 Adafruit_BMP085 bmp;
 
 File dataFile;
-String logFileName = "datalog.txt";
+char logFileName[] = "datalog.txt";
 
 
 void setup() {
+  delay(1000);
   // put your setup code here, to run once:
   Serial.begin(9600);
 
@@ -55,7 +56,8 @@ void setup() {
     Serial.println("Log file header written.");
   }
   else{
-    Serial.println("Error opening " + logFileName);
+    Serial.print("Error opening ");
+    Serial.println(logFileName);
   }
 }
 
@@ -94,7 +96,7 @@ void loop() {
   Serial.print(" hPa, Light: ");    Serial.println(lightLevel);
 
   //saving of data to SD Card
-  dataFile = SD.open(logFileName, FILE_WRITE);
+  dataFile = SD.open(logFileName, O_RDWR|O_CREAT|O_APPEND);
 
   if (dataFile){
     dataFile.print(timestamp);
@@ -115,9 +117,11 @@ void loop() {
 
   }
   else{
-    Serial.println("Error opening " + logFileName + " for writing.");
+    Serial.print("Error opening ");
+    Serial.print(logFileName);
+    Serial.println(" for writing.");
   }
 
-  delay(5000);  //delay for wr
+  delay(2900);  //delay for wr
 
 }
